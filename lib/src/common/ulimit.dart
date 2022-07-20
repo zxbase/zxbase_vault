@@ -12,6 +12,33 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-library zxbase_vault;
+/// Unsigned limit.
+/// Supports undefined value.
+class ULimit {
+  ULimit({this.value = undefined});
 
-// export 'src/common/limit.dart';
+  static const int undefined = -1;
+  int value;
+
+  /// Returns false if the input exceeds the limit.
+  bool ok(int input) {
+    if (value == undefined) {
+      return true; // no limit set
+    }
+
+    if (input > value) {
+      return false;
+    }
+
+    return true;
+  }
+
+  /// Sets the value.
+  void set(int input) {
+    if (input < undefined) {
+      value = undefined;
+    } else {
+      value = input;
+    }
+  }
+}
