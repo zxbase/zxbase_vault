@@ -1,0 +1,4 @@
+#!/bin/bash
+rm -rf coverage
+tool/dart_coverage
+open coverage/index.html
