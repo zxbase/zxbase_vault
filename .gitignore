@@ -1,6 +1,9 @@
 # Code coverage
 /coverage
 
+# Test vault
+/test_vault
+
 # Files and directories created by pub.
 .dart_tool/
 .packages

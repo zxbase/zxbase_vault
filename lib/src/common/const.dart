@@ -14,4 +14,4 @@
 
 const String seed = '_seed';
 const String meta = '_meta';
-const int revsLimit = 10;
+const int revsLimit = 2;

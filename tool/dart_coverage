@@ -1,5 +1,5 @@
 #!/bin/bash
 dart pub global activate coverage
-dart test --coverage="coverage"
+dart test --coverage="coverage" -j, --concurrency=1
 format_coverage --lcov -i coverage -o coverage/lcov.info --report-on=lib
 genhtml coverage/lcov.info --no-function-coverage -o coverage
