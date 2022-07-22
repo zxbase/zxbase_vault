@@ -45,20 +45,27 @@ class Vault {
 
   static const _component = 'vault'; // logging _component
   final int _version = 3;
-  VaultStateEnum state = VaultStateEnum.unknown;
-  String path = ''; // vault folder
+
+  VaultStateEnum _state = VaultStateEnum.unknown;
+  get state => _state;
+
+  final String path;
   Uint8List _key = Uint8List.fromList([]); // vault encryption key
-  late VaultMeta meta;
-  Map<String, Doc> docs = {};
+
+  late VaultMeta _meta;
+  get meta => _meta;
+
+  final Map<String, Doc> _docs = {};
+  get docs => _docs;
 
   VaultStateEnum _initSync() {
     if (!Directory(path).existsSync()) {
       log('Vault folder doesn\'t exist: $path', name: _component);
       return state;
     }
-    state = VaultStateEnum.empty;
+    _state = VaultStateEnum.empty;
     if (File('$path/$seed').existsSync()) {
-      state = VaultStateEnum.seeded;
+      _state = VaultStateEnum.seeded;
     }
     return state;
   }
@@ -85,11 +92,11 @@ class Vault {
 
     File('$path/$seed').writeAsStringSync(json.encode(seedDoc));
 
-    meta = VaultMeta(path: path, key: _key);
-    meta.save();
+    _meta = VaultMeta(path: path, key: _key);
+    _meta.save();
 
-    state = VaultStateEnum.ready;
-    return state;
+    _state = VaultStateEnum.ready;
+    return _state;
   }
 
   bool _openSync({required String pwd}) {
@@ -117,11 +124,11 @@ class Vault {
       return false;
     }
 
-    meta = VaultMeta.load(path: path, key: _key);
+    _meta = VaultMeta.load(path: path, key: _key);
     for (String docName in meta.docs.keys) {
       docs[docName] = Doc(path: path, name: docName, key: _key);
     }
-    state = VaultStateEnum.ready;
+    _state = VaultStateEnum.ready;
     return true;
   }
 
@@ -164,11 +171,11 @@ class Vault {
       if (!docs[name]!.meta.limits.keyCount.ok(content.keys.length)) {
         return null;
       }
-      int sizeDiff = contentString.length - docs[name]!.meta.stats.size;
+      int sizeDiff = contentString.length - _docs[name]!.meta.stats.size;
       if (!meta.limits.size.ok(meta.stats.size + sizeDiff)) {
         return null;
       }
-      int keyCountDiff = content.keys.length - docs[name]!.meta.stats.keyCount;
+      int keyCountDiff = content.keys.length - _docs[name]!.meta.stats.keyCount;
       if (!meta.limits.keyCount.ok(meta.stats.keyCount + keyCountDiff)) {
         return null;
       }
