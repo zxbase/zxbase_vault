@@ -12,6 +12,30 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-library zxbase_vault;
+import 'package:zxbase_vault/src/common/ulimit.dart';
 
-export 'src/vault.dart';
+class VaultLimits {
+  VaultLimits() {
+    size = ULimit();
+    keyCount = ULimit();
+    docCount = ULimit();
+  }
+
+  VaultLimits.fromJson(Map<String, dynamic> js) {
+    size = ULimit(value: js['size']);
+    keyCount = ULimit(value: js['keyCount']);
+    docCount = ULimit(value: js['docCount']);
+  }
+
+  late ULimit size;
+  late ULimit keyCount;
+  late ULimit docCount;
+
+  Map<String, dynamic> toJson() {
+    return <String, dynamic>{
+      'size': size.value,
+      'keyCount': keyCount.value,
+      'docCount': docCount.value,
+    };
+  }
+}

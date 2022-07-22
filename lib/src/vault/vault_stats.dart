@@ -12,6 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-library zxbase_vault;
+class VaultStats {
+  VaultStats();
 
-export 'src/vault.dart';
+  VaultStats.fromJson(Map<String, dynamic> js) {
+    size = js['size'];
+    keyCount = js['keyCount'];
+    docCount = js['docCount'];
+  }
+
+  int size = 0;
+  int keyCount = 0;
+  int docCount = 0;
+
+  Map<String, dynamic> toJson() {
+    return <String, dynamic>{
+      'size': size,
+      'keyCount': keyCount,
+      'docCount': docCount
+    };
+  }
+}

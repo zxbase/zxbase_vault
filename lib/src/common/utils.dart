@@ -54,6 +54,11 @@ class Utils {
     return IVData(iv: iv, data: data);
   }
 
+  static void deleteIvData({required String path, required String name}) {
+    File('$path/$name.iv').deleteSync();
+    File('$path/$name.dat').deleteSync();
+  }
+
   static checkDocName({required String docName}) {
     if (docName.length < 3 || docName.length > 32) {
       throw Exception('Invalid doc name length.');
@@ -64,8 +69,9 @@ class Utils {
     }
   }
 
-  static void deleteIvData({required String path, required String name}) {
-    File('$path/$name.iv').deleteSync();
-    File('$path/$name.dat').deleteSync();
+  static checkPassword(String pwd) {
+    if (pwd.length < 8 || pwd.length > 32) {
+      throw Exception('Password length ${pwd.length}.');
+    }
   }
 }
