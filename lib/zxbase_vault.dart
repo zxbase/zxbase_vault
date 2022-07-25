@@ -15,6 +15,7 @@
 library zxbase_vault;
 
 export 'src/doc.dart';
+export 'src/doc/doc_meta.dart';
 export 'src/doc/revision.dart';
 export 'src/doc/revisions.dart';
 export 'src/vault.dart';

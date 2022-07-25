@@ -1,6 +1,6 @@
 ## 3.0.2
 
-Expose Doc.
+Expose Doc and DocMeta.
 
 ## 3.0.1
 
