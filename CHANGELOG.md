@@ -1,3 +1,7 @@
+## 3.0.1
+
+Expose Revisions and Revision.
+
 ## 3.0.0
 
 We start with version 3, to be compatible with deployments

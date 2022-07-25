@@ -15,7 +15,6 @@
 import 'dart:io';
 import 'package:test/test.dart';
 import 'package:zxbase_vault/zxbase_vault.dart';
-import 'package:zxbase_vault/src/doc/revisions.dart';
 
 void main() {
   const path = './test_vault/async';
