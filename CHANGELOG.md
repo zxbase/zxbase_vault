@@ -1,3 +1,7 @@
+## 3.0.2
+
+Expose Doc.
+
 ## 3.0.1
 
 Expose Revisions and Revision.

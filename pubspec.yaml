@@ -1,6 +1,6 @@
 name: zxbase_vault
 description: Encrypted document store.
-version: 3.0.1
+version: 3.0.2
 homepage: https://zxbase.com
 publish_to: none
 

@@ -49,7 +49,7 @@ void main() {
     expect(await vault.open(pwd: pwd), equals(true));
 
     var testDoc = {'test': 'test'};
-    var doc = await vault.updateDoc(
+    Doc? doc = await vault.updateDoc(
         name: 'test', content: testDoc, annotation: {'author': 'test'});
     expect(doc!.meta.stats.keyCount, equals(1));
     expect(doc.meta.stats.size, equals(15));
@@ -172,7 +172,7 @@ void main() {
     await vault.init();
     expect(await vault.open(pwd: pwd), equals(true));
     var testDoc = {'test': 'test'};
-    var doc = await vault.updateDoc(
+    Doc? doc = await vault.updateDoc(
         name: 'test', content: testDoc, annotation: {'author': 'test'});
     expect(doc!.name, equals('test'));
   });
