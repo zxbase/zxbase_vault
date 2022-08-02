@@ -15,6 +15,8 @@
 /// Minimalistic encrypted document store.
 /// All operations are executed sequentially.
 
+// ignore_for_file: avoid_dynamic_calls
+
 import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
@@ -23,8 +25,8 @@ import 'dart:typed_data';
 
 import 'package:zxbase_crypto/zxbase_crypto.dart';
 import 'package:zxbase_vault/src/common/const.dart';
-import 'package:zxbase_vault/src/doc.dart';
 import 'package:zxbase_vault/src/common/utils.dart';
+import 'package:zxbase_vault/src/doc.dart';
 import 'package:zxbase_vault/src/vault/vault_meta.dart';
 
 enum VaultStateEnum { unknown, empty, seeded, ready }

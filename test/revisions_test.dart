@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+// ignore_for_file: avoid_dynamic_calls
+
 import 'dart:io';
 import 'package:test/test.dart';
 import 'package:zxbase_vault/zxbase_vault.dart';

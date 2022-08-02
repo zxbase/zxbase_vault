@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import 'package:zxbase_vault/src/common/utils.dart';
 import 'package:test/test.dart';
+import 'package:zxbase_vault/src/common/utils.dart';
 
 void main() {
   test('sequence wrap around', () {
@@ -28,6 +28,5 @@ void main() {
     seq = 0x7ffffffffffffff;
     seq = Utils.incSeq(seq);
     expect(seq, equals(576460752303423488));
-    print('finished sequence test');
   });
 }

@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:zxbase_vault/zxbase_vault.dart';
 
 void main() async {
