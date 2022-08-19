@@ -45,8 +45,8 @@ void main() {
     Vault vault = Vault(path: path);
     await vault.init();
     expect(await vault.open(pwd: pwd), equals(true));
-    var testDoc = {'test': 'test2', 'newKey': 'newContent2'};
-    var doc = await vault.updateDoc(
+    final testDoc = {'test': 'test2', 'newKey': 'newContent2'};
+    final doc = await vault.updateDoc(
         name: 'test2',
         content: testDoc,
         annotation: {'author': 'John', 'date': 7});
@@ -65,7 +65,7 @@ void main() {
     expect(vault.meta.stats.keyCount, equals(2));
     expect(vault.meta.stats.size, equals(39));
 
-    var js = doc.meta.revs.export();
+    final js = doc.meta.revs.export();
     Revisions rev = Revisions.import(js);
     expect(rev.current.seq, equals(1));
     expect(

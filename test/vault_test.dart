@@ -23,6 +23,8 @@ void main() {
   const path = './test_vault/async';
   const pwd = '12345678cC%';
   const id = 'VaultId';
+  const testDoc = {'test': 'test'};
+  const testDoc1 = {'test': 'test1'};
 
   try {
     Directory(path).deleteSync(recursive: true);
@@ -101,10 +103,9 @@ void main() {
     Vault vault = Vault(path: path);
     await vault.init();
     expect(await vault.open(pwd: pwd), equals(true));
-    var testDoc = {'test': 'test'};
-    var doc = await vault.updateDoc(
+    final doc = await vault.updateDoc(
         name: 'test', content: testDoc, annotation: {'author': 'test'});
-    expect(doc!.content, equals({'test': 'test'}));
+    expect(doc!.content, equals(testDoc));
     expect(doc.meta.stats.size, equals(15));
     expect(doc.meta.stats.keyCount, equals(1));
     expect(vault.meta.stats.docCount, equals(1));
@@ -116,7 +117,7 @@ void main() {
     Vault vault = Vault(path: path);
     await vault.init();
     expect(await vault.open(pwd: pwd), equals(true));
-    var doc = await vault.getDoc(name: 'test');
+    final doc = await vault.getDoc(name: 'test');
     expect(doc!.content, equals({'test': 'test'}));
     expect(vault.meta.stats.docCount, equals(1));
     expect(vault.meta.stats.keyCount, equals(1));
@@ -138,7 +139,6 @@ void main() {
     Vault vault = Vault(path: path);
     await vault.init();
     expect(await vault.open(pwd: pwd), equals(true));
-    var testDoc = {'test': 'test'};
 
     runZonedGuarded(() {
       vault.updateDoc(
@@ -152,7 +152,6 @@ void main() {
     Vault vault = Vault(path: path);
     await vault.init();
     expect(await vault.open(pwd: pwd), equals(true));
-    var testDoc = {'test': 'test'};
 
     runZonedGuarded(() {
       vault.updateDoc(
@@ -166,7 +165,7 @@ void main() {
     Vault vault = Vault(path: path);
     await vault.init();
     expect(await vault.open(pwd: pwd), equals(true));
-    var doc = await vault.getDoc(name: 'test');
+    final doc = await vault.getDoc(name: 'test');
     expect(
         doc!.meta.revs.current.hash,
         equals(
@@ -179,9 +178,8 @@ void main() {
     Vault vault = Vault(path: path);
     await vault.init();
     expect(await vault.open(pwd: pwd), equals(true));
-    var testDoc = {'test': 'test1'};
-    var doc = await vault.updateDoc(
-        name: 'test', content: testDoc, annotation: {'author': 'test'});
+    final doc = await vault.updateDoc(
+        name: 'test', content: testDoc1, annotation: {'author': 'test'});
     expect(doc!.meta.revs.current.seq, equals(2));
     expect(
         doc.meta.revs.current.hash,
@@ -198,9 +196,9 @@ void main() {
     Vault vault = Vault(path: path);
     await vault.init();
     expect(await vault.open(pwd: pwd), equals(true));
-    var testDoc = {'test': 'test2', 'newKey': 'newContent'};
-    var doc =
-        await vault.updateDoc(name: 'test', content: testDoc, annotation: {});
+    final testDoc2 = {'test': 'test2', 'newKey': 'newContent'};
+    final doc =
+        await vault.updateDoc(name: 'test', content: testDoc2, annotation: {});
     expect(
         doc!.meta.revs.current.hash,
         equals(
@@ -224,9 +222,9 @@ void main() {
     Vault vault = Vault(path: path);
     await vault.init();
     expect(await vault.open(pwd: pwd), equals(true));
-    var testDoc = {'test': 'test2', 'newKey': 'newContent2'};
-    var doc = await vault.updateDoc(
-        name: 'test2', content: testDoc, annotation: {'author': 'test'});
+    final testDoc3 = {'test': 'test2', 'newKey': 'newContent2'};
+    final doc = await vault.updateDoc(
+        name: 'test2', content: testDoc3, annotation: {'author': 'test'});
     expect(
         doc!.meta.revs.current.hash,
         equals(

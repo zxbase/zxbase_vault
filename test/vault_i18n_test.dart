@@ -23,6 +23,7 @@ void main() {
   const pwd = '1@34שלום';
   const id = 'Паляниця';
   const testDoc = {'タイプ': 'वीर्य'};
+  const docName = 'noti18n';
 
   try {
     Directory(path).deleteSync(recursive: true);
@@ -54,9 +55,7 @@ void main() {
     await vault.init();
     expect(await vault.open(pwd: pwd), equals(true));
     final doc = await vault.updateDoc(
-        name: 'noti18n',
-        content: testDoc,
-        annotation: {'höfundur': 'ผู้เขียน'});
+        name: docName, content: testDoc, annotation: {'höfundur': 'ผู้เขียน'});
     expect(doc!.content, equals(testDoc));
     expect(doc.meta.stats.size, equals(15));
     expect(doc.meta.stats.keyCount, equals(1));
@@ -69,7 +68,7 @@ void main() {
     Vault vault = Vault(path: path);
     await vault.init();
     expect(await vault.open(pwd: pwd), equals(true));
-    final doc = await vault.getDoc(name: 'noti18n');
+    final doc = await vault.getDoc(name: docName);
     expect(doc!.content, equals(testDoc));
     expect(vault.meta.stats.docCount, equals(1));
     expect(vault.meta.stats.keyCount, equals(1));
@@ -80,7 +79,7 @@ void main() {
     Vault vault = Vault(path: path);
     await vault.init();
     expect(await vault.open(pwd: pwd), equals(true));
-    final doc = await vault.getDoc(name: 'noti18n');
+    final doc = await vault.getDoc(name: docName);
     expect(
         doc!.meta.revs.current.hash,
         equals(

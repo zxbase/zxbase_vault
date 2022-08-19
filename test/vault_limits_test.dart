@@ -29,6 +29,17 @@ void main() {
   const path = './test_vault/limits';
   const pwd = '12345678cC%';
   const id = 'VaultId';
+  const testDoc = {'test': 'test'};
+  const testDoc2 = {'test': 'test123456'};
+  const testDoc3 = {
+    'test':
+        'We have to get the size of the doc bigger than 300 in order to exceed the limit',
+    'test1':
+        'We have to get the size of the doc bigger than 300 in order to exceed the limit',
+    'test2':
+        'We have to get the size of the doc bigger than 300 in order to exceed the limit'
+  };
+  const testDoc4 = {'test': 'test', 'test2': 'test2'};
 
   try {
     Directory(path).deleteSync(recursive: true);
@@ -50,7 +61,6 @@ void main() {
 
     expect(await vault.open(pwd: pwd), equals(true));
 
-    var testDoc = {'test': 'test'};
     Doc? doc = await vault.updateDoc(
         name: 'test', content: testDoc, annotation: {'author': 'test'});
     expect(doc!.meta.stats.keyCount, equals(1));
@@ -78,12 +88,11 @@ void main() {
     await vault.init();
     expect(await vault.open(pwd: pwd), equals(true));
 
-    var rv = await vault.setDocSizeLimit(name: 'test', limit: 20);
+    final rv = await vault.setDocSizeLimit(name: 'test', limit: 20);
     expect(rv, equals(true));
 
-    var testDoc = {'test': 'test123456'};
-    var doc = await vault.updateDoc(
-        name: 'test', content: testDoc, annotation: {'author': 'test'});
+    final doc = await vault.updateDoc(
+        name: 'test', content: testDoc2, annotation: {'author': 'test'});
     expect(doc, equals(null));
   });
 
@@ -92,10 +101,9 @@ void main() {
     await vault.init();
     expect(await vault.open(pwd: pwd), equals(true));
 
-    var testDoc = {'test': 'test123456'};
     expect(
         await vault.updateDoc(
-            name: 'test', content: testDoc, annotation: {'author': 'test'}),
+            name: 'test', content: testDoc2, annotation: {'author': 'test'}),
         equals(null));
   });
 
@@ -106,17 +114,9 @@ void main() {
 
     await vault.setSizeLimit(limit: 250);
 
-    var testDoc = {
-      'test':
-          'We have to get the size of the doc bigger than 300 in order to exceed the limit',
-      'test1':
-          'We have to get the size of the doc bigger than 300 in order to exceed the limit',
-      'test2':
-          'We have to get the size of the doc bigger than 300 in order to exceed the limit'
-    };
     expect(
         await vault.updateDoc(
-            name: 'test1', content: testDoc, annotation: {'author': 'test'}),
+            name: 'test1', content: testDoc3, annotation: {'author': 'test'}),
         equals(null));
   });
 
@@ -125,17 +125,9 @@ void main() {
     await vault.init();
     expect(await vault.open(pwd: pwd), equals(true));
 
-    var testDoc = {
-      'test':
-          'We have to get the size of the doc bigger than 300 in order to exceed the limit',
-      'test1':
-          'We have to get the size of the doc bigger than 300 in order to exceed the limit',
-      'test2':
-          'We have to get the size of the doc bigger than 300 in order to exceed the limit'
-    };
     expect(
         await vault.updateDoc(
-            name: 'test1', content: testDoc, annotation: {'author': 'test'}),
+            name: 'test1', content: testDoc3, annotation: {'author': 'test'}),
         equals(null));
   });
 
@@ -151,7 +143,6 @@ void main() {
     // set docs limit to 1
     await vault.setDocCountLimit(limit: 1);
 
-    var testDoc = {'test': 'test'};
     expect(
         await vault.updateDoc(
             name: 'test2', content: testDoc, annotation: {'author': 'test'}),
@@ -162,7 +153,6 @@ void main() {
     Vault vault = Vault(path: path);
     await vault.init();
     expect(await vault.open(pwd: pwd), equals(true));
-    var testDoc = {'test': 'test'};
     expect(
         await vault.updateDoc(
             name: 'test2', content: testDoc, annotation: {'author': 'test'}),
@@ -173,7 +163,6 @@ void main() {
     Vault vault = Vault(path: path);
     await vault.init();
     expect(await vault.open(pwd: pwd), equals(true));
-    var testDoc = {'test': 'test'};
     Doc? doc = await vault.updateDoc(
         name: 'test', content: testDoc, annotation: {'author': 'test'});
     expect(doc!.name, equals('test'));
@@ -190,10 +179,9 @@ void main() {
     rv = await vault.setDocSizeLimit(name: 'test', limit: ULimit.undefined);
     expect(rv, equals(true));
 
-    var testDoc = {'test': 'test', 'test2': 'test2'};
     expect(
         await vault.updateDoc(
-            name: 'test', content: testDoc, annotation: {'author': 'test'}),
+            name: 'test', content: testDoc4, annotation: {'author': 'test'}),
         equals(null));
   });
 
@@ -201,10 +189,10 @@ void main() {
     Vault vault = Vault(path: path);
     await vault.init();
     expect(await vault.open(pwd: pwd), equals(true));
-    var testDoc = {'test': 'test', 'test2': 'test2', 'test3': 'test3'};
+    final testDoc5 = {'test': 'test', 'test2': 'test2', 'test3': 'test3'};
     expect(
         await vault.updateDoc(
-            name: 'test', content: testDoc, annotation: {'author': 'test'}),
+            name: 'test', content: testDoc5, annotation: {'author': 'test'}),
         equals(null));
   });
 
@@ -212,10 +200,9 @@ void main() {
     Vault vault = Vault(path: path);
     await vault.init();
     expect(await vault.open(pwd: pwd), equals(true));
-    var testDoc = {'test': 'test', 'test2': 'test2'};
     expect(
         await vault.updateDoc(
-            name: 'test2', content: testDoc, annotation: {'author': 'test'}),
+            name: 'test2', content: testDoc4, annotation: {'author': 'test'}),
         equals(null));
   });
 }
