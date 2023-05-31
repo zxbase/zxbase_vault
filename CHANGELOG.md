@@ -1,3 +1,7 @@
+## 3.0.3
+
+Dart 3 support.
+
 ## 3.0.2
 
 Expose Doc and DocMeta.
