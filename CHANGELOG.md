@@ -1,3 +1,7 @@
+## 3.0.4
+
+Update uuid package to 4.0.0.
+
 ## 3.0.3
 
 Dart 3 support.
