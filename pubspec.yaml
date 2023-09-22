@@ -8,7 +8,7 @@ environment:
   sdk: '>=3.0.2 <4.0.0'
 
 dependencies:
-  uuid: ^3.0.0
+  uuid: ^4.0.0
   zxbase_crypto:
     git: https://github.com/zxbase/zxbase_crypto
 
