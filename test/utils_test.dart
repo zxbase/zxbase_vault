@@ -29,4 +29,8 @@ void main() {
     seq = Utils.incSeq(seq);
     expect(seq, equals(576460752303423488));
   });
+
+  test('delete files', () {
+    Utils.deleteIvData(path: 'path', name: 'name');
+  });
 }

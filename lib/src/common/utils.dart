@@ -15,11 +15,14 @@
 /// Miscellaneous utils.
 
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:zxbase_crypto/zxbase_crypto.dart';
 
 class Utils {
+  static const _component = 'utils'; // logging _component
+
   /// Ensure sequence is always positive and equals 1 only
   /// for the first revision.
   static int incSeq(int seq) {
@@ -55,8 +58,17 @@ class Utils {
   }
 
   static void deleteIvData({required String path, required String name}) {
-    File('$path/$name.iv').deleteSync();
-    File('$path/$name.dat').deleteSync();
+    try {
+      File('$path/$name.iv').deleteSync();
+    } catch (e) {
+      log('Failed to delete file $path / $name .iv', name: _component);
+    }
+
+    try {
+      File('$path/$name.dat').deleteSync();
+    } catch (e) {
+      log('Failed to delete file $path / $name .dat', name: _component);
+    }
   }
 
   static checkDocName({required String docName}) {
