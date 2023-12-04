@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/// Revisions (history).
-
 import 'dart:convert';
 import 'package:zxbase_vault/src/common/const.dart';
 import 'package:zxbase_vault/src/common/utils.dart';

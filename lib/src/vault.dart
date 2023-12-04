@@ -17,6 +17,8 @@
 
 // ignore_for_file: avoid_dynamic_calls
 
+library;
+
 import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';

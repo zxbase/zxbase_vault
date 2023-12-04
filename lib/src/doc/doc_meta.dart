@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/// Doc metadata.
-
 import 'dart:developer';
 import 'dart:typed_data';
 import 'package:zxbase_crypto/zxbase_crypto.dart';
