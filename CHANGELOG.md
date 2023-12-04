@@ -1,3 +1,8 @@
+## 3.1.0
+
+Handle file deletion exceptions.
+Update packages.
+
 ## 3.0.4
 
 Update uuid package to 4.0.0.
