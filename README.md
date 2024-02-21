@@ -16,7 +16,7 @@ Zxbase Vault is an encrypted document store implemented in pure Dart.
 In _pubspec.yaml_:
 ```yaml
 dependencies:
-  zxbase_vault: ^1.0.0
+  zxbase_vault: ^3.1.0
 ```
 
 In your code:
