@@ -1,6 +1,6 @@
 name: zxbase_vault
 description: Encrypted document store.
-version: 3.1.0
+version: 3.1.1
 homepage: https://zxbase.com
 publish_to: none
 
@@ -13,5 +13,5 @@ dependencies:
     git: https://github.com/zxbase/zxbase_crypto
 
 dev_dependencies:
-  lints: ^3.0.0
+  lints: ^4.0.0
   test: ^1.16.0

@@ -1,3 +1,7 @@
+## 3.1.1
+
+Upgrade lints to 4.0.0.
+
 ## 3.1.0
 
 Handle file deletion exceptions.
