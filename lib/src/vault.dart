@@ -51,16 +51,16 @@ class Vault {
   final int _version = 3;
 
   VaultStateEnum _state = VaultStateEnum.unknown;
-  get state => _state;
+  VaultStateEnum get state => _state;
 
   final String path;
   Uint8List _key = Uint8List.fromList([]); // vault encryption key
 
   late VaultMeta _meta;
-  get meta => _meta;
+  VaultMeta get meta => _meta;
 
   final Map<String, Doc> _docs = {};
-  get docs => _docs;
+  Map<String, Doc> get docs => _docs;
 
   VaultStateEnum _initSync() {
     if (!Directory(path).existsSync()) {
@@ -209,17 +209,17 @@ class Vault {
     return true;
   }
 
-  _setSizeLimitSync({required int limit}) {
+  void _setSizeLimitSync({required int limit}) {
     meta.limits.size.set(limit);
     meta.save();
   }
 
-  _setKeyCountLimitSync({required int limit}) {
+  void _setKeyCountLimitSync({required int limit}) {
     meta.limits.keyCount.set(limit);
     meta.save();
   }
 
-  _setDocCountLimitSync({required int limit}) {
+  void _setDocCountLimitSync({required int limit}) {
     meta.limits.docCount.set(limit);
     meta.save();
   }

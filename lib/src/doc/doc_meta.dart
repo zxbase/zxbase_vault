@@ -46,7 +46,7 @@ class DocMeta {
     return {'limits': limits, 'rev': revs, 'stats': stats};
   }
 
-  save() {
+  void save() {
     log('Saving', name: _component);
     IVData ivData = Utils.encryptMap(key: key, map: toJson());
     Utils.writeIvData(path: path, name: meta, ivData: ivData);

@@ -1,3 +1,9 @@
+## 3.1.4
+
+Upgrade lints to 6.0.0.
+Address type warnings.
+Adjust dependency check.
+
 ## 3.1.1
 
 Upgrade lints to 4.0.0.

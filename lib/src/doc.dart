@@ -52,7 +52,7 @@ class Doc {
     save();
   }
 
-  createNewRevision(
+  void createNewRevision(
       {required Map<String, dynamic> content,
       required Map<String, dynamic> annotation}) {
     String contentString = json.encode(content);
@@ -73,24 +73,24 @@ class Doc {
     meta.save();
   }
 
-  setSizeLimit({required int limit}) {
+  void setSizeLimit({required int limit}) {
     meta.limits.size.set(limit);
     meta.save();
   }
 
-  setKeyCountLimit({required int limit}) {
+  void setKeyCountLimit({required int limit}) {
     meta.limits.keyCount.set(limit);
     meta.save();
   }
 
-  saveContent() {
+  void saveContent() {
     Utils.writeIvData(
         path: docPath,
         name: meta.revs.current.fileId,
         ivData: encryptedContent);
   }
 
-  save() {
+  void save() {
     Directory(docPath).createSync();
     saveContent();
     meta.save();

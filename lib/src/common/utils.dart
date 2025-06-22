@@ -69,7 +69,7 @@ class Utils {
     }
   }
 
-  static checkDocName({required String docName}) {
+  static void checkDocName({required String docName}) {
     if (docName.length < 3 || docName.length > 32) {
       throw Exception('Invalid doc name length.');
     }
@@ -79,7 +79,7 @@ class Utils {
     }
   }
 
-  static checkPassword(String pwd) {
+  static void checkPassword(String pwd) {
     if (pwd.length < 8 || pwd.length > 32) {
       throw Exception('Password length ${pwd.length}.');
     }

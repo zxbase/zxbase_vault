@@ -59,7 +59,8 @@ class Revisions {
     return {'seq': seq, 'limit': limit, 'revisions': json.encode(revisions)};
   }
 
-  create({required String hash, required Map<String, dynamic> annotation}) {
+  void create(
+      {required String hash, required Map<String, dynamic> annotation}) {
     seq = Utils.incSeq(seq);
     revisions.add(Revision(seq: seq, hash: hash, annotation: annotation));
   }
@@ -68,7 +69,7 @@ class Revisions {
     return (revisions.length > limit);
   }
 
-  prune() {
+  void prune() {
     revisions.removeAt(0);
   }
 }

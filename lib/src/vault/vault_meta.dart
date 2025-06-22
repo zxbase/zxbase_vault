@@ -52,7 +52,7 @@ class VaultMeta {
     return {'docs': docs, 'limits': limits, 'stats': stats};
   }
 
-  addDoc({required Doc doc}) {
+  void addDoc({required Doc doc}) {
     docs[doc.name] = true;
     stats.docCount++;
     stats.keyCount += doc.meta.stats.keyCount;
@@ -60,7 +60,7 @@ class VaultMeta {
   }
 
   // Recalculate stats from scratch.
-  updateStats({required Map<String, Doc> vaultDocs}) {
+  void updateStats({required Map<String, Doc> vaultDocs}) {
     stats.docCount = vaultDocs.keys.length;
     stats.size = 0;
     stats.keyCount = 0;
@@ -70,7 +70,7 @@ class VaultMeta {
     }
   }
 
-  save() {
+  void save() {
     log('Saving', name: _component);
     IVData ivData = Utils.encryptMap(key: key, map: toJson());
     Utils.writeIvData(path: path, name: meta, ivData: ivData);
