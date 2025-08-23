@@ -80,7 +80,7 @@ class Utils {
   }
 
   static void checkPassword(String pwd) {
-    if (pwd.length < 8 || pwd.length > 32) {
+    if (pwd.length < 8 || pwd.length > 64) {
       throw Exception('Password length ${pwd.length}.');
     }
   }

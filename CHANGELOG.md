@@ -1,3 +1,7 @@
+## 3.2.0
+
+Allow up to 64-character-long password.
+
 ## 3.1.4
 
 Upgrade lints to 6.0.0.
