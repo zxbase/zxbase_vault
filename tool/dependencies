@@ -1,3 +1,2 @@
-#!/bin/bash
 dart pub outdated --color
 dart pub outdated --color | egrep 'Found no outdated packages|direct dependencies: all up-to-date.'
