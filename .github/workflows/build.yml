@@ -28,11 +28,11 @@ jobs:
       - name: Verify formatting
         run: dart format --output=none --set-exit-if-changed .
 
-      - name: Analyze project source
-        run: dart analyze --fatal-infos
+      - name: Analyze source code
+        run: ./tool/analyze
 
-      - name: Run tests
-        run: ./tool/dart_coverage
+      - name: Run tests and produce coverage
+        run: ./tool/test_coverage
 
       - name: Upload code coverage artifact
         uses: actions/upload-artifact@v4
