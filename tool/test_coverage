@@ -3,6 +3,3 @@ dart pub global activate coverage
 dart test --coverage="coverage" -j, --concurrency=1
 format_coverage --lcov -i coverage -o coverage/lcov.info --report-on=lib
 genhtml coverage/lcov.info --no-function-coverage -o coverage
-if command -v open >/dev/null 2>&1; then
-    open coverage/index.html
-fi
