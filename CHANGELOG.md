@@ -1,3 +1,7 @@
+## 4.0.0
+
+Introduce plaintext vault.
+
 ## 3.2.0
 
 Allow up to 64-character-long password.
