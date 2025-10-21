@@ -22,17 +22,26 @@ import 'package:zxbase_vault/src/vault/vault_limits.dart';
 import 'package:zxbase_vault/src/vault/vault_stats.dart';
 
 class VaultMeta {
-  VaultMeta({required this.path, required this.key}) {
+  VaultMeta({required this.path, required this.key, required this.encrypted}) {
     docs = {};
     limits = VaultLimits();
     stats = VaultStats();
   }
 
-  VaultMeta.load({required this.path, required this.key}) {
+  VaultMeta.load(
+      {required this.path, required this.key, required this.encrypted}) {
     log('Loading', name: _component);
     docs = {};
-    IVData ivData = Utils.readIvData(path: path, name: meta);
-    Map js = Utils.decryptMap(ivData: ivData, key: key);
+
+    Map js;
+    if (encrypted) {
+      IVData ivData = Utils.readIvData(path: path, name: meta);
+      js = Utils.decryptMap(ivData: ivData, key: key);
+    } else {
+      IVData ivData = Utils.readData(path: path, name: meta);
+      js = Utils.plaintextMap(ivData: ivData);
+    }
+
     Map parsedDocs = js['docs'];
     parsedDocs.forEach((k, v) {
       docs[k] = true;
@@ -47,6 +56,7 @@ class VaultMeta {
   late VaultStats stats;
   late String path;
   late Uint8List key;
+  late bool encrypted;
 
   Map<String, dynamic> toJson() {
     return {'docs': docs, 'limits': limits, 'stats': stats};
@@ -72,7 +82,14 @@ class VaultMeta {
 
   void save() {
     log('Saving', name: _component);
-    IVData ivData = Utils.encryptMap(key: key, map: toJson());
-    Utils.writeIvData(path: path, name: meta, ivData: ivData);
+
+    if (encrypted) {
+      IVData ivData = Utils.encryptMap(key: key, map: toJson());
+      Utils.writeIvData(path: path, name: meta, ivData: ivData);
+      return;
+    }
+
+    IVData ivData = Utils.plaintextIVData(map: toJson());
+    Utils.writeData(path: path, name: meta, ivData: ivData);
   }
 }

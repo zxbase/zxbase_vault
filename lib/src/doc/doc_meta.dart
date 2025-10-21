@@ -22,14 +22,23 @@ import 'package:zxbase_vault/src/doc/doc_stats.dart';
 import 'package:zxbase_vault/src/doc/revisions.dart';
 
 class DocMeta {
-  DocMeta({required this.path, required this.key}) {
+  DocMeta({required this.path, required this.key, required this.encrypted}) {
     limits = DocLimits();
   }
 
-  DocMeta.load({required this.path, required this.key}) {
+  DocMeta.load(
+      {required this.path, required this.key, required this.encrypted}) {
     log('Loading', name: _component);
-    IVData ivData = Utils.readIvData(path: path, name: meta);
-    Map js = Utils.decryptMap(ivData: ivData, key: key);
+
+    Map js;
+    if (encrypted) {
+      IVData ivData = Utils.readIvData(path: path, name: meta);
+      js = Utils.decryptMap(ivData: ivData, key: key);
+    } else {
+      IVData ivData = Utils.readData(path: path, name: meta);
+      js = Utils.plaintextMap(ivData: ivData);
+    }
+
     limits = DocLimits.fromJson(js['limits']);
     revs = Revisions.fromJson(js['rev']);
     stats = DocStats.fromJson(js['stats']);
@@ -41,6 +50,7 @@ class DocMeta {
   late Revisions revs;
   late String path;
   late Uint8List key;
+  late bool encrypted;
 
   Map<String, dynamic> toJson() {
     return {'limits': limits, 'rev': revs, 'stats': stats};
@@ -48,7 +58,14 @@ class DocMeta {
 
   void save() {
     log('Saving', name: _component);
-    IVData ivData = Utils.encryptMap(key: key, map: toJson());
-    Utils.writeIvData(path: path, name: meta, ivData: ivData);
+
+    if (encrypted) {
+      IVData ivData = Utils.encryptMap(key: key, map: toJson());
+      Utils.writeIvData(path: path, name: meta, ivData: ivData);
+      return;
+    }
+
+    IVData ivData = Utils.plaintextIVData(map: toJson());
+    Utils.writeData(path: path, name: meta, ivData: ivData);
   }
 }

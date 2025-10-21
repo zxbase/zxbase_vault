@@ -24,12 +24,24 @@ import 'package:zxbase_vault/src/doc/revisions.dart';
 
 class Doc {
   /// Load document from storage.
-  Doc({required this.path, required this.name, required this.key}) {
+  Doc(
+      {required this.path,
+      required this.name,
+      required this.key,
+      required this.encrypted}) {
     docPath = '$path/$name';
-    meta = DocMeta.load(path: docPath, key: key);
-    content = Utils.decryptMap(
-        ivData: Utils.readIvData(path: docPath, name: meta.revs.current.fileId),
-        key: key);
+    meta = DocMeta.load(path: docPath, key: key, encrypted: encrypted);
+
+    if (encrypted) {
+      content = Utils.decryptMap(
+          ivData:
+              Utils.readIvData(path: docPath, name: meta.revs.current.fileId),
+          key: key);
+      return;
+    }
+
+    content = Utils.plaintextMap(
+        ivData: Utils.readData(path: docPath, name: meta.revs.current.fileId));
   }
 
   /// Create first revision of the document.
@@ -38,16 +50,23 @@ class Doc {
       required this.path,
       required this.name,
       required this.key,
-      required Map<String, dynamic> annotation}) {
+      required Map<String, dynamic> annotation,
+      required this.encrypted}) {
     docPath = '$path/$name';
-    meta = DocMeta(path: docPath, key: key);
+    meta = DocMeta(path: docPath, key: key, encrypted: encrypted);
 
     String contentString = json.encode(content);
     meta.stats =
         DocStats(size: contentString.length, keyCount: content.keys.length);
     String hash = Hash.hash3_256(contentString);
     meta.revs = Revisions(firstHash: hash, annotation: annotation);
-    encryptedContent = Utils.encryptMap(key: key, map: content);
+
+    if (encrypted) {
+      encryptedContent = Utils.encryptMap(key: key, map: content);
+    } else {
+      encryptedContent = Utils.plaintextIVData(map: content);
+    }
+
     log('Saving first revision $name', name: _component);
     save();
   }
@@ -60,7 +79,12 @@ class Doc {
     meta.revs.create(hash: hash, annotation: annotation);
 
     this.content = content;
-    encryptedContent = Utils.encryptMap(key: key, map: content);
+
+    if (encrypted) {
+      encryptedContent = Utils.encryptMap(key: key, map: content);
+    } else {
+      encryptedContent = Utils.plaintextIVData(map: content);
+    }
     saveContent();
 
     meta.stats.size = contentString.length;
@@ -84,7 +108,14 @@ class Doc {
   }
 
   void saveContent() {
-    Utils.writeIvData(
+    if (encrypted) {
+      Utils.writeIvData(
+          path: docPath,
+          name: meta.revs.current.fileId,
+          ivData: encryptedContent);
+      return;
+    }
+    Utils.writeData(
         path: docPath,
         name: meta.revs.current.fileId,
         ivData: encryptedContent);
@@ -106,4 +137,5 @@ class Doc {
   late String docPath;
   late Map<String, dynamic> content;
   late IVData encryptedContent;
+  late bool encrypted;
 }

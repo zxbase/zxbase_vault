@@ -34,7 +34,7 @@ import 'package:zxbase_vault/src/vault/vault_meta.dart';
 enum VaultStateEnum { unknown, empty, seeded, ready }
 
 class Vault {
-  Vault({required this.path}) {
+  Vault({required this.path, this.encrypted = true}) {
     _orderedOpsController.stream
         .asyncMap((future) async => await future)
         .listen((_) {}, cancelOnError: false);
@@ -48,7 +48,8 @@ class Vault {
   }
 
   static const _component = 'vault'; // logging _component
-  final int _version = 3;
+  final int _version = 4;
+  bool encrypted = true;
 
   VaultStateEnum _state = VaultStateEnum.unknown;
   VaultStateEnum get state => _state;
@@ -79,24 +80,29 @@ class Vault {
       throw Exception('Incorrect vault state for setup.');
     }
 
-    Utils.checkPassword(pwd);
+    Map seedDoc;
+    if (encrypted) {
+      Utils.checkPassword(pwd);
 
-    Uint8List salt = Password.generateSalt();
-    Uint8List derivedKey = Password.derive256BitKey(pwd: pwd, salt: salt);
-    _key = SKCrypto.generate256BitKey();
-    IVData encryptedKey = SKCrypto.encryptSync(buffer: _key, key: derivedKey);
+      Uint8List salt = Password.generateSalt();
+      Uint8List derivedKey = Password.derive256BitKey(pwd: pwd, salt: salt);
+      _key = SKCrypto.generate256BitKey();
+      IVData encryptedKey = SKCrypto.encryptSync(buffer: _key, key: derivedKey);
 
-    Map seedDoc = {
-      'version': _version,
-      'id': id,
-      'salt': base64Url.encode(salt),
-      'iv': base64Url.encode(encryptedKey.iv),
-      'data': base64Url.encode(encryptedKey.data)
-    };
+      seedDoc = {
+        'version': _version,
+        'id': id,
+        'salt': base64Url.encode(salt),
+        'iv': base64Url.encode(encryptedKey.iv),
+        'data': base64Url.encode(encryptedKey.data)
+      };
+    } else {
+      seedDoc = {'version': _version, 'id': id};
+    }
 
     File('$path/$seed').writeAsStringSync(json.encode(seedDoc));
 
-    _meta = VaultMeta(path: path, key: _key);
+    _meta = VaultMeta(path: path, key: _key, encrypted: encrypted);
     _meta.save();
 
     _state = VaultStateEnum.ready;
@@ -113,24 +119,26 @@ class Vault {
     try {
       Map<String, dynamic> seedDoc = json.decode(seedFile.readAsStringSync());
 
-      // convert types manually
-      Uint8List salt =
-          Uint8List.fromList(base64Url.decode(seedDoc['salt']).cast<int>());
-      Uint8List iv =
-          Uint8List.fromList(base64Url.decode(seedDoc['iv']).cast<int>());
-      Uint8List data =
-          Uint8List.fromList(base64Url.decode(seedDoc['data']).cast<int>());
+      if (encrypted) {
+        Uint8List salt =
+            Uint8List.fromList(base64Url.decode(seedDoc['salt']).cast<int>());
+        Uint8List iv =
+            Uint8List.fromList(base64Url.decode(seedDoc['iv']).cast<int>());
+        Uint8List data =
+            Uint8List.fromList(base64Url.decode(seedDoc['data']).cast<int>());
 
-      var derivedKey = Password.derive256BitKey(pwd: pwd, salt: salt);
-      _key = SKCrypto.decryptSync(iv: iv, buffer: data, key: derivedKey);
+        var derivedKey = Password.derive256BitKey(pwd: pwd, salt: salt);
+        _key = SKCrypto.decryptSync(iv: iv, buffer: data, key: derivedKey);
+      }
     } catch (e) {
       log('Can not open $e', name: _component);
       return false;
     }
 
-    _meta = VaultMeta.load(path: path, key: _key);
+    _meta = VaultMeta.load(path: path, key: _key, encrypted: encrypted);
     for (String docName in meta.docs.keys) {
-      docs[docName] = Doc(path: path, name: docName, key: _key);
+      docs[docName] =
+          Doc(path: path, name: docName, key: _key, encrypted: encrypted);
     }
     _state = VaultStateEnum.ready;
     return true;
@@ -165,7 +173,8 @@ class Vault {
           path: path,
           name: name,
           key: _key,
-          annotation: annotation);
+          annotation: annotation,
+          encrypted: encrypted);
       meta.addDoc(doc: docs[name]!);
     } else {
       // existing doc - check vault and doc limits

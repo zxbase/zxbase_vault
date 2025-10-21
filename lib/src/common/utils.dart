@@ -33,6 +33,12 @@ class Utils {
     return SKCrypto.encryptSync(buffer: data, key: key);
   }
 
+  // used in plaintext vault, Map → IVData
+  static IVData plaintextIVData({required Map<String, dynamic> map}) {
+    Uint8List data = Uint8List.fromList(utf8.encode(json.encode(map)));
+    return IVData(iv: Uint8List(0), data: data);
+  }
+
   static Map<String, dynamic> decryptMap(
       {required IVData ivData, required Uint8List key}) {
     Uint8List res =
@@ -40,6 +46,19 @@ class Utils {
     return json.decode(utf8.decode(res));
   }
 
+  // used in plaintext vault, IVData → Map
+  static Map<String, dynamic> plaintextMap({required IVData ivData}) {
+    return json.decode(utf8.decode(ivData.data));
+  }
+
+  // writes data file only
+  static void writeData(
+      {required String path, required String name, required IVData ivData}) {
+    Directory(path).createSync();
+    File('$path/$name.dat').writeAsBytesSync(ivData.data, flush: true);
+  }
+
+  // writes data iv data pair of files
   static void writeIvData(
       {required String path, required String name, required IVData ivData}) {
     Directory(path).createSync();
@@ -47,6 +66,14 @@ class Utils {
     File('$path/$name.dat').writeAsBytesSync(ivData.data, flush: true);
   }
 
+  // reads data file only
+  static IVData readData({required String path, required String name}) {
+    final datFile = File('$path/$name.dat');
+    Uint8List data = datFile.readAsBytesSync();
+    return IVData(iv: Uint8List(0), data: data);
+  }
+
+  // reads iv data pair of files
   static IVData readIvData({required String path, required String name}) {
     final ivFile = File('$path/$name.iv');
     final datFile = File('$path/$name.dat');
