@@ -15,12 +15,13 @@ tool/analyze
 
 Pass tests.
 ```
-dart test
+tool/test
 ```
 
-Check coverage is not degrading.
+Check the test coverage is not degrading.
 ```
-tool/generate_coverage
+tool/test_coverage
+open coverage/index.html
 ```
 
 Check dependencies are up to date.
