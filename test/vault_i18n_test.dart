@@ -19,7 +19,7 @@ import 'package:test/test.dart';
 import 'package:zxbase_vault/zxbase_vault.dart';
 
 void main() {
-  const path = './test_vault/async';
+  const path = './test_vault/i18n';
   const pwd = '1@34שלום';
   const id = 'Паляниця';
   const testDoc = {'タイプ': 'वीर्य'};
