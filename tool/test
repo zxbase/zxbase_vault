@@ -1,1 +1,1 @@
-dart test -j, --concurrency=1
+dart test -j, --concurrency=1 $1
