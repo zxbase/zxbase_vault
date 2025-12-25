@@ -60,8 +60,7 @@ class Vault {
   late VaultMeta _meta;
   VaultMeta get meta => _meta;
 
-  final Map<String, Doc> _docs = {};
-  Map<String, Doc> get docs => _docs;
+  final Map<String, Doc> docs = {};
 
   VaultStateEnum _initSync() {
     if (!Directory(path).existsSync()) {
@@ -184,11 +183,11 @@ class Vault {
       if (!docs[name]!.meta.limits.keyCount.ok(content.keys.length)) {
         return null;
       }
-      int sizeDiff = contentString.length - _docs[name]!.meta.stats.size;
+      int sizeDiff = contentString.length - docs[name]!.meta.stats.size;
       if (!meta.limits.size.ok(meta.stats.size + sizeDiff)) {
         return null;
       }
-      int keyCountDiff = content.keys.length - _docs[name]!.meta.stats.keyCount;
+      int keyCountDiff = content.keys.length - docs[name]!.meta.stats.keyCount;
       if (!meta.limits.keyCount.ok(meta.stats.keyCount + keyCountDiff)) {
         return null;
       }
@@ -197,6 +196,23 @@ class Vault {
     }
     meta.save();
     return docs[name]!;
+  }
+
+  bool _delDocSync({required String name}) {
+    if (!docs.containsKey(name)) {
+      return false;
+    }
+
+    final doc = docs[name]!;
+
+    meta.delDoc(doc: doc); // update stats
+
+    Utils.delDir(path: '$path/$name'); // delete directory
+
+    docs.remove(name); // delete in-memory
+
+    meta.save();
+    return true;
   }
 
   /// Limits //////////////////////////////////////////////////////////
@@ -261,6 +277,11 @@ class Vault {
     return _updateDocSync(name: name, content: content, annotation: annotation);
   }
 
+  Future<bool> _delDoc({required String name}) async {
+    _check(name);
+    return _delDocSync(name: name);
+  }
+
   Future<bool> _setDocKeyCountLimit(
       {required String name, required int limit}) async {
     return _setDocKeyCountLimitSync(name: name, limit: limit);
@@ -307,6 +328,10 @@ class Vault {
       required Map<String, dynamic> annotation}) async {
     return await _queueOp(
         _updateDoc(name: name, content: content, annotation: annotation));
+  }
+
+  Future<bool> delDoc({required String name}) async {
+    return await _queueOp(_delDoc(name: name));
   }
 
   Future<bool> setDocKeyCountLimit(

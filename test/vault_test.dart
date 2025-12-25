@@ -239,4 +239,19 @@ void main() {
     expect(vault.meta.stats.keyCount, equals(4));
     expect(vault.meta.stats.size, equals(77));
   });
+
+  test('Delete recently added doc', () async {
+    Vault vault = Vault(path: path);
+
+    await vault.init();
+    expect(await vault.open(pwd: pwd), equals(true));
+
+    bool rv = await vault.delDoc(name: 'test2');
+    expect(rv, equals(true));
+
+    // stats as before the previous test
+    expect(vault.meta.stats.docCount, equals(1));
+    expect(vault.meta.stats.keyCount, equals(2));
+    expect(vault.meta.stats.size, equals(38));
+  });
 }

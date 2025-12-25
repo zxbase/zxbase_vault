@@ -69,6 +69,13 @@ class VaultMeta {
     stats.size += doc.meta.stats.size;
   }
 
+  void delDoc({required Doc doc}) {
+    docs.remove(doc.name);
+    stats.docCount--;
+    stats.keyCount -= doc.meta.stats.keyCount;
+    stats.size -= doc.meta.stats.size;
+  }
+
   // Recalculate stats from scratch.
   void updateStats({required Map<String, Doc> vaultDocs}) {
     stats.docCount = vaultDocs.keys.length;

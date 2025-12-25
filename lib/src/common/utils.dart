@@ -58,6 +58,10 @@ class Utils {
     File('$path/$name.dat').writeAsBytesSync(ivData.data, flush: true);
   }
 
+  static void delDir({required String path}) {
+    Directory(path).deleteSync(recursive: true);
+  }
+
   // writes data iv data pair of files
   static void writeIvData(
       {required String path, required String name, required IVData ivData}) {
