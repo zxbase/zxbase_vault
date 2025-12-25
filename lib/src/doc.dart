@@ -91,7 +91,9 @@ class Doc {
     meta.stats.keyCount = content.keys.length;
 
     if (meta.revs.needToPrune) {
-      Utils.deleteIvData(path: docPath, name: meta.revs.revisions.first.fileId);
+      // non-encrypted vault will not have IV
+      Utils.deleteIvData(
+          path: docPath, name: meta.revs.revisions.first.fileId, iv: encrypted);
       meta.revs.prune();
     }
     meta.save();

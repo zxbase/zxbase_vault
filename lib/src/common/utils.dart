@@ -82,26 +82,31 @@ class Utils {
     return IVData(iv: iv, data: data);
   }
 
-  static void deleteIvData({required String path, required String name}) {
-    try {
-      File('$path/$name.iv').deleteSync();
-    } catch (e) {
-      log('Failed to delete file $path / $name .iv', name: _component);
-    }
-
+  static void deleteIvData(
+      {required String path, required String name, bool iv = true}) {
     try {
       File('$path/$name.dat').deleteSync();
     } catch (e) {
-      log('Failed to delete file $path / $name .dat', name: _component);
+      log('Failed to delete file $path/$name.dat', name: _component);
+    }
+
+    if (!iv) {
+      return;
+    }
+
+    try {
+      File('$path/$name.iv').deleteSync();
+    } catch (e) {
+      log('Failed to delete file $path/$name.iv', name: _component);
     }
   }
 
   static void checkDocName({required String docName}) {
-    if (docName.length < 3 || docName.length > 32) {
+    if (docName.length < 3 || docName.length > 64) {
       throw Exception('Invalid doc name length.');
     }
 
-    if (!RegExp(r'^[a-zA-Z0-9]+$').hasMatch(docName)) {
+    if (!RegExp(r'^[a-zA-Z0-9-]+$').hasMatch(docName)) {
       throw Exception('Invalid doc name format.');
     }
   }
