@@ -20,7 +20,7 @@ class Revision {
     required this.hash,
     required Map<String, dynamic> annotation,
   }) {
-    fileId = const Uuid().v4();
+    fileId = const Uuid().v7();
     author = annotation['author'] ?? '';
     authorHash = annotation['authorHash'] ?? hash;
     authorVersion = annotation['authorVersion'] ?? '';
